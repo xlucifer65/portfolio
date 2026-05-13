@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react'
 
 const taglines = [
@@ -82,10 +83,14 @@ export function Hero() {
             {/* Glow ring */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 blur-md opacity-40 scale-110" />
             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl">
-              {/* Placeholder avatar — replace with <Image src="/images/rayyan.jpg" alt="Rayyan Ahemad" fill className="object-cover" /> */}
-              <div className="w-full h-full bg-gradient-to-br from-indigo-600 via-violet-600 to-cyan-600 flex items-center justify-center">
-                <span className="text-white font-display font-bold text-5xl">R</span>
-              </div>
+              <Image
+                src="/images/rayyan.jpg"
+                alt="Rayyan Ahemad"
+                fill
+                className="object-cover object-top"
+                priority
+                sizes="(max-width: 768px) 128px, 160px"
+              />
             </div>
             {/* Status indicator */}
             <div className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-background shadow-lg shadow-emerald-400/50" />
