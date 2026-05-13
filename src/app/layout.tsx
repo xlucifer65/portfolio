@@ -1,8 +1,29 @@
 import type { Metadata } from 'next'
+import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ThemeProvider } from '@/components/ui/ThemeProvider'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plus-jakarta',
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+})
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  weight: ['400', '500', '600'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -31,14 +52,7 @@ export const metadata: Metadata = {
     description:
       'Building things while figuring life out. Engineer obsessed with AI tools, AWS architecture, and shipping real products.',
     siteName: 'Rayyan Ahemad',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Rayyan Ahemad Portfolio',
-      },
-    ],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Rayyan Ahemad Portfolio' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -57,7 +71,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="noise-bg antialiased">
+      <body className={`${inter.variable} ${plusJakarta.variable} ${jetbrains.variable} antialiased`}>
         <ThemeProvider>
           <Navbar />
           <main>{children}</main>

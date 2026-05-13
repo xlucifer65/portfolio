@@ -2,119 +2,111 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { Menu, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/#about', label: 'About' },
-  { href: '/#projects', label: 'Projects' },
-  { href: '/#blog', label: 'Blog' },
-  { href: '/#contact', label: 'Contact' },
+  { href: '/#projects', label: 'Work' },
+  { href: '/#blog', label: 'Writing' },
 ]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const pathname = usePathname()
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handler = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
   }, [])
-
-  useEffect(() => setMobileOpen(false), [pathname])
 
   return (
     <>
       <motion.header
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'glass border-b border-white/[0.06] shadow-lg shadow-black/20'
-            : 'bg-transparent'
-        )}
+        transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
+        className="fixed top-5 left-0 right-0 z-50 flex justify-center px-4"
       >
-        <div className="container-max px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="group flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:scale-105 transition-transform duration-200">
-                R
-              </div>
-              <span className="font-display font-semibold text-sm tracking-tight hidden sm:block">
-                Rayyan Ahemad
-              </span>
-            </Link>
+        {/* Pill nav */}
+        <nav
+          className="glass flex items-center gap-1 px-2 pr-2 py-2 rounded-full shadow-card transition-all duration-200"
+          style={{
+            paddingTop: scrolled ? '7px' : '10px',
+            paddingBottom: scrolled ? '7px' : '10px',
+            paddingLeft: '22px',
+          }}
+        >
+          {/* Wordmark */}
+          <Link href="/" className="t-grad font-display font-extrabold text-[17px] tracking-tight mr-3 flex-shrink-0">
+            Rayyan
+          </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-all duration-200"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Right side */}
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
+          {/* Links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
               <Link
-                href="/#contact"
-                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-all duration-200 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+                key={link.href}
+                href={link.href}
+                className="px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-150 hover:text-[var(--fg)] text-[var(--fg-2)] hover:bg-[var(--bg-3)]"
               >
-                Let&apos;s Talk
+                {link.label}
               </Link>
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-9 h-9 glass rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors border border-white/5"
-              >
-                {mobileOpen ? <X size={16} /> : <Menu size={16} />}
-              </button>
-            </div>
+            ))}
           </div>
-        </div>
+
+          <div className="hidden md:flex items-center gap-2 ml-1">
+            <ThemeToggle />
+            <Link
+              href="/#contact"
+              className="btn-grad px-4 py-2 rounded-full text-[12px] font-bold tracking-tight flex items-center gap-1.5 flex-shrink-0"
+            >
+              Contact <span>→</span>
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex md:hidden items-center gap-2 ml-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-[var(--fg-2)] hover:text-[var(--fg)] transition-colors"
+            >
+              {mobileOpen ? <X size={15} /> : <Menu size={15} />}
+            </button>
+          </div>
+        </nav>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 glass border-b border-white/[0.06] shadow-xl shadow-black/30 md:hidden"
+            initial={{ opacity: 0, y: -12, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.97 }}
+            transition={{ duration: 0.18 }}
+            className="fixed top-20 left-4 right-4 z-40 glass rounded-2xl shadow-lift p-4 flex flex-col gap-1 md:hidden"
           >
-            <nav className="container-max px-4 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-all duration-200"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            {navLinks.map((link) => (
               <Link
-                href="/#contact"
+                key={link.href}
+                href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 px-4 py-3 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white text-center transition-all duration-200"
+                className="px-4 py-3 rounded-xl text-sm text-[var(--fg-2)] hover:text-[var(--fg)] hover:bg-[var(--bg-3)] transition-all duration-150"
               >
-                Let&apos;s Talk
+                {link.label}
               </Link>
-            </nav>
+            ))}
+            <Link
+              href="/#contact"
+              onClick={() => setMobileOpen(false)}
+              className="mt-1 btn-grad px-4 py-3 rounded-xl text-sm font-bold text-center"
+            >
+              Contact →
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

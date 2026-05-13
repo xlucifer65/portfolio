@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 
 const taglines = [
   'Building things while figuring life out.',
@@ -15,85 +15,129 @@ const taglines = [
   'Vibe coding into production.',
 ]
 
-const techPills = ['AWS', 'Python', 'Next.js', 'AI/LLMs', 'Automation', 'Flask', 'Framer Motion']
-
 export function Hero() {
   const [taglineIndex, setTaglineIndex] = useState(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTaglineIndex((i) => (i + 1) % taglines.length)
-    }, 3000)
-    return () => clearInterval(interval)
+    const id = setInterval(() => setTaglineIndex((i) => (i + 1) % taglines.length), 3200)
+    return () => clearInterval(id)
   }, [])
 
   return (
-    <section className="relative min-h-screen hero-gradient flex flex-col items-center justify-center overflow-hidden">
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 -left-32 w-96 h-96 bg-indigo-500/8 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -20, 0], y: [0, 30, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute bottom-1/4 -right-32 w-96 h-96 bg-violet-500/8 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, 15, 0], y: [0, 15, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/4 rounded-full blur-3xl"
-        />
-      </div>
-
-      {/* Grid overlay */}
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: 'var(--bg)' }}
+      id="top"
+    >
+      {/* Static gradient backdrop — visible without JS */}
       <div
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
+          background: `
+            radial-gradient(800px 400px at 20% -10%, rgba(99,102,241,.18), transparent 60%),
+            radial-gradient(700px 350px at 90% 110%, rgba(6,182,212,.14), transparent 60%),
+            radial-gradient(600px 300px at 50% 50%, rgba(139,92,246,.08), transparent 60%)
+          `,
         }}
       />
 
-      <div className="relative z-10 container-max px-4 sm:px-6 lg:px-8 text-center">
-        {/* Availability badge */}
+      {/* Animated blobs */}
+      <div
+        className="absolute rounded-full pointer-events-none anim-float"
+        style={{
+          width: 340, height: 340,
+          background: 'var(--accent-1)',
+          top: '10%', left: '6%',
+          filter: 'blur(70px)', opacity: 0.12,
+        }}
+      />
+      <div
+        className="absolute rounded-full pointer-events-none anim-float-delay"
+        style={{
+          width: 380, height: 380,
+          background: 'var(--accent-2)',
+          bottom: '8%', right: '8%',
+          filter: 'blur(70px)', opacity: 0.1,
+        }}
+      />
+      <div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: 240, height: 240,
+          background: 'var(--accent-3)',
+          top: '60%', left: '40%',
+          filter: 'blur(60px)', opacity: 0.07,
+          animation: 'float 10s ease-in-out infinite',
+          animationDelay: '-5s',
+        }}
+      />
+
+      {/* Subtle grid */}
+      <div
+        className="absolute inset-0 opacity-[0.018] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
+          backgroundSize: '64px 64px',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 container-max px-6 sm:px-8 text-center" style={{ paddingTop: '120px', paddingBottom: '80px' }}>
+
+        {/* Availability chip */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex justify-center mb-8"
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="flex justify-center mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full border border-indigo-500/20 text-sm text-indigo-400">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-            <Sparkles size={13} />
-            <span>Open to interesting work & conversations</span>
+          <div
+            className="glass inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono tracking-wide"
+            style={{ color: 'var(--fg-2)' }}
+          >
+            <span className="status-dot" />
+            Open to new work &amp; conversations · 2026
           </div>
         </motion.div>
 
-        {/* Profile image */}
+        {/* Photo */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-          className="flex justify-center mb-8"
+          transition={{ duration: 0.65, delay: 0.15, ease: [0.4, 1.4, 0.6, 1] }}
+          className="flex justify-center mb-9"
         >
           <div className="relative">
-            {/* Glow ring */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 blur-md opacity-40 scale-110" />
-            <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl">
+            <div
+              className="absolute inset-0 rounded-full blur-xl opacity-50 scale-110"
+              style={{ background: 'var(--grad)' }}
+            />
+            <div
+              className="relative rounded-full overflow-hidden border-2"
+              style={{
+                width: 136, height: 136,
+                borderColor: 'rgba(255,255,255,0.1)',
+                boxShadow: 'var(--shadow-glow)',
+              }}
+            >
               <Image
                 src="/images/rayyan.jpg"
                 alt="Rayyan Ahemad"
                 fill
                 className="object-cover object-top"
                 priority
-                sizes="(max-width: 768px) 128px, 160px"
+                sizes="136px"
               />
             </div>
-            {/* Status indicator */}
-            <div className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-background shadow-lg shadow-emerald-400/50" />
+            {/* Online dot */}
+            <div
+              className="absolute bottom-2 right-2 w-4 h-4 rounded-full border-2"
+              style={{
+                background: '#34d399',
+                borderColor: 'var(--bg)',
+                boxShadow: '0 0 10px rgba(52,211,153,.6)',
+              }}
+            />
           </div>
         </motion.div>
 
@@ -101,28 +145,35 @@ export function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
-          className="font-display font-black text-5xl md:text-7xl lg:text-8xl tracking-tight mb-4"
+          transition={{ duration: 0.6, delay: 0.28 }}
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
+            fontSize: 'clamp(52px, 9vw, 108px)',
+            lineHeight: 1.02,
+            letterSpacing: '-0.04em',
+            marginBottom: '16px',
+          }}
         >
-          <span className="gradient-text">Rayyan</span>{' '}
-          <span className="text-foreground">Ahemad</span>
+          <span className="t-grad">Rayyan</span>{' '}
+          <span style={{ color: 'var(--fg)' }}>Ahemad</span>
         </motion.h1>
 
         {/* Rotating tagline */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="h-8 flex items-center justify-center mb-8"
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="h-7 flex items-center justify-center mb-7"
         >
           <AnimatePresence mode="wait">
             <motion.p
               key={taglineIndex}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.4 }}
-              className="text-muted-foreground text-base md:text-lg font-medium"
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35 }}
+              style={{ color: 'var(--fg-2)', fontSize: 'clamp(15px, 1.4vw, 19px)', fontWeight: 400 }}
             >
               {taglines[taglineIndex]}
             </motion.p>
@@ -130,79 +181,78 @@ export function Hero() {
         </motion.div>
 
         {/* Bio */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="max-w-2xl mx-auto mb-10"
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-balance mx-auto mb-10"
+          style={{
+            maxWidth: '54ch',
+            color: 'var(--fg-2)',
+            fontSize: 'clamp(15px, 1.3vw, 18px)',
+            lineHeight: 1.65,
+          }}
         >
-          <p className="text-muted-foreground text-base md:text-lg leading-relaxed text-balance">
-            I deploy projects on <span className="text-indigo-400 font-medium">AWS</span>, build{' '}
-            <span className="text-violet-400 font-medium">AI tools</span> that actually do
-            something useful, and spend too much time thinking about how real systems scale.
-            Preparing for{' '}
-            <span className="text-cyan-400 font-medium">AWS Solutions Architect</span>. Still
-            learning. Honestly, that&apos;s the fun part.
-          </p>
-        </motion.div>
+          I deploy projects on{' '}
+          <span style={{ color: 'var(--accent-1)', fontWeight: 500 }}>AWS</span>, build{' '}
+          <span style={{ color: 'var(--accent-2)', fontWeight: 500 }}>AI tools</span> that actually
+          do something useful, and obsess over how real systems scale. Preparing for{' '}
+          <span style={{ color: 'var(--accent-3)', fontWeight: 500 }}>AWS Solutions Architect</span>.
+          Still learning — honestly, that&apos;s the fun part.
+        </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.72 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10"
         >
           <Link
             href="/#projects"
-            className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5"
+            className="btn-grad inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold tracking-tight"
           >
-            See My Work
-            <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            View my work <span>→</span>
           </Link>
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold glass border border-white/[0.08] text-foreground hover:bg-white/[0.05] hover:border-white/[0.12] transition-all duration-200 hover:-translate-y-0.5"
+            className="btn-outline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold"
+            style={{ color: 'var(--fg)', fontFamily: 'var(--font-display)' }}
           >
-            Get In Touch
+            Get in touch
           </Link>
         </motion.div>
 
-        {/* Tech pills */}
+        {/* Meta mono line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.85 }}
-          className="flex flex-wrap justify-center gap-2 mb-16"
+          transition={{ duration: 0.5, delay: 0.72 }}
+          className="flex flex-wrap items-center justify-center gap-6 mb-14"
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--fg-3)', letterSpacing: '0.03em' }}
         >
-          {techPills.map((tech, i) => (
-            <motion.span
-              key={tech}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.85 + i * 0.06 }}
-              className="px-3 py-1 text-xs glass border border-white/[0.06] rounded-full text-muted-foreground hover:text-foreground hover:border-white/[0.12] transition-all duration-200 cursor-default"
-            >
-              {tech}
-            </motion.span>
-          ))}
+          <span>// based in France</span>
+          <span>// building since curiosity hit</span>
+          <span>// aws · python · next.js · ai</span>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll cue */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-          className="flex flex-col items-center gap-2"
+          transition={{ duration: 0.5, delay: 0.9 }}
+          className="flex flex-col items-center gap-1.5"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-muted-foreground/40 hover:text-muted-foreground transition-colors cursor-pointer"
+            style={{ color: 'rgba(255,255,255,0.2)' }}
           >
-            <ArrowDown size={20} />
+            <ArrowDown size={18} />
           </motion.div>
-          <span className="text-xs text-muted-foreground/30">scroll to explore</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.15)' }}>
+            scroll
+          </span>
         </motion.div>
       </div>
     </section>

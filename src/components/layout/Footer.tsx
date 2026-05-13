@@ -1,54 +1,79 @@
 import Link from 'next/link'
 import { Github, Mail, Youtube, Linkedin } from 'lucide-react'
 
-const socialLinks = [
-  { icon: Github, label: 'GitHub', href: 'https://github.com/rayyanahemad' },
+const socials = [
+  { icon: Github, label: 'GitHub', href: 'https://github.com/xlucifer65' },
   { icon: Youtube, label: 'YouTube', href: 'https://youtube.com/@rayyanahemad' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/rayyanahemad' },
   { icon: Mail, label: 'Email', href: 'mailto:xlucifer65@gmail.com' },
 ]
 
 export function Footer() {
-  const year = new Date().getFullYear()
-
   return (
-    <footer className="border-t border-white/[0.06] py-12">
-      <div className="container-max px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Branding */}
-          <div className="flex flex-col items-center md:items-start gap-1">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xs">
-                R
-              </div>
-              <span className="font-display font-semibold text-sm">Rayyan Ahemad</span>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Building things while figuring life out.
-            </p>
-          </div>
+    <footer
+      style={{
+        borderTop: '1px solid var(--line)',
+        padding: '32px',
+      }}
+    >
+      <div
+        className="container-max"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+        }}
+      >
+        {/* Wordmark */}
+        <Link
+          href="/"
+          className="t-grad"
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
+            fontSize: '18px',
+            letterSpacing: '-0.02em',
+          }}
+        >
+          Rayyan Ahemad
+        </Link>
 
-          {/* Social links */}
-          <div className="flex items-center gap-2">
-            {socialLinks.map(({ icon: Icon, label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="w-9 h-9 glass rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground border border-white/5 hover:border-white/10 transition-all duration-200 hover:-translate-y-0.5"
-              >
-                <Icon size={15} />
-              </Link>
-            ))}
-          </div>
-
-          {/* Copyright */}
-          <p className="text-xs text-muted-foreground">
-            © {year} Rayyan Ahemad. Built with curiosity.
-          </p>
+        {/* Socials */}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {socials.map(({ icon: Icon, label, href }) => (
+            <Link
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              style={{
+                width: '36px', height: '36px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                borderRadius: '50%',
+                border: '1px solid var(--line)',
+                color: 'var(--fg-3)',
+                transition: 'color 160ms, border-color 160ms, transform 160ms',
+              }}
+              className="hover:text-[var(--fg)] hover:border-[var(--line-2)] hover:-translate-y-0.5 transition-all"
+            >
+              <Icon size={14} />
+            </Link>
+          ))}
         </div>
+
+        {/* Copyright */}
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '12px',
+            color: 'var(--fg-3)',
+          }}
+        >
+          © {new Date().getFullYear()} Rayyan Ahemad · Built with Next.js · Tailwind · Framer Motion
+        </span>
       </div>
     </footer>
   )
