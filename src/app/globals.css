@@ -175,6 +175,15 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
+/* Hero load-in — CSS-driven so content is visible before JS */
+.hero-animate-1 { animation: fade-up 0.55s var(--ease-out) 0.05s both; }
+.hero-animate-2 { animation: scale-in 0.65s var(--ease-spring) 0.15s both; }
+.hero-animate-3 { animation: fade-up 0.6s var(--ease-out) 0.28s both; }
+.hero-animate-4 { animation: fade-up 0.55s var(--ease-out) 0.42s both; }
+.hero-animate-5 { animation: fade-up 0.55s var(--ease-out) 0.54s both; }
+.hero-animate-6 { animation: fade-up 0.5s var(--ease-out) 0.66s both; }
+.hero-animate-7 { animation: fade-up 0.45s var(--ease-out) 0.8s both; }
+
 /* ── Utility classes ── */
 @layer utilities {
   /* Glass */

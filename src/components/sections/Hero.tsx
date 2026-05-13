@@ -29,7 +29,7 @@ export function Hero() {
       style={{ background: 'var(--bg)' }}
       id="top"
     >
-      {/* Static gradient backdrop — visible without JS */}
+      {/* Static gradient backdrop — CSS only, always visible */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -41,7 +41,7 @@ export function Hero() {
         }}
       />
 
-      {/* Animated blobs */}
+      {/* Animated blobs — CSS animations */}
       <div
         className="absolute rounded-full pointer-events-none anim-float"
         style={{
@@ -57,7 +57,7 @@ export function Hero() {
           width: 380, height: 380,
           background: 'var(--accent-2)',
           bottom: '8%', right: '8%',
-          filter: 'blur(70px)', opacity: 0.1,
+          filter: 'blur(70px)', opacity: 0.10,
         }}
       />
       <div
@@ -72,7 +72,7 @@ export function Hero() {
         }}
       />
 
-      {/* Subtle grid */}
+      {/* Grid */}
       <div
         className="absolute inset-0 opacity-[0.018] pointer-events-none"
         style={{
@@ -81,16 +81,13 @@ export function Hero() {
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 container-max px-6 sm:px-8 text-center" style={{ paddingTop: '120px', paddingBottom: '80px' }}>
-
-        {/* Availability chip */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          className="flex justify-center mb-10"
-        >
+      {/* Content — CSS-animated, visible before JS */}
+      <div
+        className="relative z-10 container-max px-6 sm:px-8 text-center"
+        style={{ paddingTop: '120px', paddingBottom: '80px' }}
+      >
+        {/* Availability badge */}
+        <div className="flex justify-center mb-10 hero-animate-1">
           <div
             className="glass inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono tracking-wide"
             style={{ color: 'var(--fg-2)' }}
@@ -98,15 +95,10 @@ export function Hero() {
             <span className="status-dot" />
             Open to new work &amp; conversations · 2026
           </div>
-        </motion.div>
+        </div>
 
         {/* Photo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.65, delay: 0.15, ease: [0.4, 1.4, 0.6, 1] }}
-          className="flex justify-center mb-9"
-        >
+        <div className="flex justify-center mb-9 hero-animate-2">
           <div className="relative">
             <div
               className="absolute inset-0 rounded-full blur-xl opacity-50 scale-110"
@@ -129,7 +121,6 @@ export function Hero() {
                 sizes="136px"
               />
             </div>
-            {/* Online dot */}
             <div
               className="absolute bottom-2 right-2 w-4 h-4 rounded-full border-2"
               style={{
@@ -139,13 +130,11 @@ export function Hero() {
               }}
             />
           </div>
-        </motion.div>
+        </div>
 
         {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.28 }}
+        <h1
+          className="hero-animate-3"
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
@@ -157,35 +146,30 @@ export function Hero() {
         >
           <span className="t-grad">Rayyan</span>{' '}
           <span style={{ color: 'var(--fg)' }}>Ahemad</span>
-        </motion.h1>
+        </h1>
 
-        {/* Rotating tagline */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="h-7 flex items-center justify-center mb-7"
+        {/* Rotating tagline — only this uses Framer Motion (swap animation only) */}
+        <div
+          className="hero-animate-4"
+          style={{ height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}
         >
           <AnimatePresence mode="wait">
             <motion.p
               key={taglineIndex}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
               style={{ color: 'var(--fg-2)', fontSize: 'clamp(15px, 1.4vw, 19px)', fontWeight: 400 }}
             >
               {taglines[taglineIndex]}
             </motion.p>
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         {/* Bio */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-balance mx-auto mb-10"
+        <p
+          className="text-balance mx-auto mb-10 hero-animate-5"
           style={{
             maxWidth: '54ch',
             color: 'var(--fg-2)',
@@ -199,14 +183,11 @@ export function Hero() {
           do something useful, and obsess over how real systems scale. Preparing for{' '}
           <span style={{ color: 'var(--accent-3)', fontWeight: 500 }}>AWS Solutions Architect</span>.
           Still learning — honestly, that&apos;s the fun part.
-        </motion.p>
+        </p>
 
         {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10"
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10 hero-animate-6"
         >
           <Link
             href="/#projects"
@@ -221,39 +202,39 @@ export function Hero() {
           >
             Get in touch
           </Link>
-        </motion.div>
+        </div>
 
-        {/* Meta mono line */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.72 }}
-          className="flex flex-wrap items-center justify-center gap-6 mb-14"
-          style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--fg-3)', letterSpacing: '0.03em' }}
+        {/* Meta */}
+        <div
+          className="flex flex-wrap items-center justify-center gap-6 mb-14 hero-animate-7"
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '12px',
+            color: 'var(--fg-3)',
+            letterSpacing: '0.03em',
+          }}
         >
           <span>// based in France</span>
           <span>// building since curiosity hit</span>
           <span>// aws · python · next.js · ai</span>
-        </motion.div>
+        </div>
 
         {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
-          className="flex flex-col items-center gap-1.5"
+        <div
+          className="flex flex-col items-center gap-1.5 hero-animate-7"
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ color: 'rgba(255,255,255,0.2)' }}
+          <div
+            style={{
+              color: 'rgba(255,255,255,0.2)',
+              animation: 'float 2s ease-in-out infinite',
+            }}
           >
             <ArrowDown size={18} />
-          </motion.div>
+          </div>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.15)' }}>
             scroll
           </span>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
