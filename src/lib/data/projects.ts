@@ -47,6 +47,7 @@ Not quite there yet. But getting closer every week.`,
     ],
     accent: '#6366f1',
     featured: true,
+    href: 'https://parserai.xyz',
   },
   {
     id: 'mauk-reconciliation',

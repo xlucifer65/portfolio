@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { projects } from '@/lib/data/projects'
-import { ArrowLeft, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, ExternalLink } from 'lucide-react'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default function ProjectPage({ params }: Props) {
   const project = projects.find((p) => p.id === params.id)
   if (!project) notFound()
+  if (project.href) redirect(project.href)
 
   return (
     <div className="min-h-screen pt-24 pb-20">

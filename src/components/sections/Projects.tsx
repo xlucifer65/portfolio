@@ -213,12 +213,28 @@ function FeaturedCard({ project }: { project: (typeof projects)[0] }) {
             ))}
           </div>
 
-          <Link
-            href={`/projects/${project.id}`}
-            className="self-start btn-grad px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
-          >
-            Deep dive →
-          </Link>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Link
+              href={project.href ?? `/projects/${project.id}`}
+              target={project.href ? '_blank' : undefined}
+              rel={project.href ? 'noopener noreferrer' : undefined}
+              className="self-start btn-grad px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
+            >
+              {project.href ? 'Visit site →' : 'Deep dive →'}
+            </Link>
+            {project.href && (
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '11px',
+                  color: 'var(--fg-3)', letterSpacing: '.02em',
+                  display: 'flex', alignItems: 'center', gap: '5px',
+                }}
+              >
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--accent-3)', display: 'inline-block', boxShadow: '0 0 8px var(--accent-3-glow)' }} />
+                {project.href.replace('https://', '')}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </motion.article>
@@ -313,11 +329,13 @@ function ProjectCard({ project, thumbGradient }: { project: (typeof projects)[0]
         </div>
 
         <Link
-          href={`/projects/${project.id}`}
+          href={project.href ?? `/projects/${project.id}`}
+          target={project.href ? '_blank' : undefined}
+          rel={project.href ? 'noopener noreferrer' : undefined}
           style={{ color: project.accent, fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
           className="hover:opacity-80 transition-opacity"
         >
-          View project →
+          {project.href ? 'Visit site →' : 'View project →'}
         </Link>
       </div>
     </motion.article>
