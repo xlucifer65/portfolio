@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #efeae0;
+  --ink: #1c1a17;
+  --muted: #4a463f;
+  --line: #cdc5b6;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+body {
+  font-feature-settings: "kern";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
