@@ -12,26 +12,28 @@ export default function Home() {
     <>
       <TopBar showName={false} />
       <main id="main-content" className="flex-1">
-        {/* First screen: name, short bio, engraved portrait. Nothing else. */}
-        <section className="shell grid min-h-[calc(100svh-4.5rem)] items-end gap-6 md:grid-cols-[minmax(0,1fr)_auto]">
-          <div className="max-w-sm self-center pb-6 text-[15px] leading-relaxed">
-            <h1 className="font-medium">{site.name}</h1>
-            <p className="text-muted">
-              {site.role}, {site.contact.location.split(",")[0]}
-            </p>
-            <p className="mt-6">{site.lede}</p>
-            <a href="#work" className="mt-10 inline-block text-xs text-muted hover:text-ink">
-              Work ↓
-            </a>
+        {/* Wide portrait anchored bottom-right; the text sits in its empty left side. */}
+        <section className="relative flex flex-col lg:block lg:h-[calc(100svh-4rem)] lg:min-h-[560px] lg:overflow-hidden">
+          <div className="shell relative z-10 flex h-full items-center py-10 lg:py-0">
+            <div className="max-w-sm text-[15px] leading-relaxed">
+              <h1 className="font-medium">{site.name}</h1>
+              <p className="text-muted">
+                {site.role}, {site.contact.location.split(",")[0]}
+              </p>
+              <p className="mt-6">{site.lede}</p>
+              <a href="#work" className="mt-10 inline-block text-xs text-muted hover:text-ink">
+                Work ↓
+              </a>
+            </div>
           </div>
           <Image
-            src="/portrait-engraved.png"
+            src="/portrait-wide.png"
             alt={`Engraved portrait of ${site.name} in sunglasses, sipping through a straw`}
-            width={939}
-            height={1675}
+            width={1676}
+            height={939}
             priority
-            sizes="(min-width: 768px) 50vh, 70vw"
-            className="mx-auto h-[62svh] w-auto md:h-[86svh]"
+            sizes="100vw"
+            className="h-auto w-full lg:absolute lg:right-0 lg:bottom-0 lg:w-[min(100vw,calc((100svh-4rem)*1.785))] lg:max-w-none"
           />
         </section>
 
