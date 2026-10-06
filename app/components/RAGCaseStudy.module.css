@@ -1,0 +1,40 @@
+.hero {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.intro { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.kicker { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.title { margin-top: 1.25rem; max-width: 30rem; font-size: clamp(1.65rem, 3.4vw, 2.5rem); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; }
+.description { margin-top: 1rem; font-size: 14px; line-height: 1.75; color: var(--muted); }
+.links { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-top: 1.5rem; font-size: 12px; }
+.visual { display: flex; min-width: 0; align-items: center; background: var(--surface-2); border-radius: 3px; }
+.results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); margin-top: 1.5rem; }
+.result { min-width: 0; border-bottom: 1px solid var(--line); padding: 1.1rem .75rem 1.1rem 0; }
+.result dt { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.result dd { margin-top: .4rem; font-family: var(--font-mono); font-size: 18px; }
+.process { padding-block: 2.5rem; border-top: 1px solid var(--line); margin-top: 2.5rem; }
+.processTitle { font-size: 20px; font-weight: 500; letter-spacing: -.025em; }
+.steps { margin-top: 2rem; display: grid; gap: 1.25rem; }
+.step { display: grid; gap: 1rem; min-width: 0; padding: 1.25rem; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+.stepCopy { min-width: 0; padding-block: .5rem; }
+.stepTitle { margin-top: .6rem; font-size: 20px; line-height: 1.3; letter-spacing: -.025em; font-weight: 500; }
+.stepText { margin-top: .75rem; font-size: 13px; line-height: 1.8; color: var(--muted); }
+.stepVisual { display: flex; align-items: center; min-width: 0; background: var(--surface-2); border-radius: 3px; }
+.overview { margin-block: 1.5rem 2.25rem; }
+@media (min-width: 640px) {
+  .hero { padding: 2.5rem; }
+  .results { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .step { padding: 1.75rem; }
+}
+@media (min-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.5rem; }
+  .step { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+  .step:nth-child(even) .stepVisual { order: -1; }
+}

@@ -22,5 +22,29 @@ export const site = {
     location: "Paris, France",
     github: "https://github.com/xlucifer65",
     linkedin: "https://www.linkedin.com/in/rayyan-ahemad/",
+    scholar: "https://scholar.google.com/citations?user=NmpsGFYAAAAJ",
+    cv: "/Rayyan_Ahemad_CV.pdf",
   },
+  publications: [
+    {
+      title:
+        "Web-based Interface for Detecting and Classifying the Solar PV Panel Defects using CNN Model",
+      venue: "2025 IEEE 9th International Conference · co-author",
+      url: "https://ieeexplore.ieee.org/document/11399178",
+    },
+  ],
+  education: [
+    {
+      school: "EPITA — School of Engineering & Computer Science",
+      degree: "M.S. in Artificial Intelligence Systems (CGE-accredited)",
+      place: "Paris, France",
+      dates: "Feb 2026 – Sep 2027",
+    },
+    {
+      school: "Woxsen University",
+      degree: "B.Tech. in Computer Science Engineering",
+      place: "Hyderabad, India",
+      dates: "2021 – 2025",
+    },
+  ],
 };

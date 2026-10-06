@@ -1,14 +1,13 @@
 // Content for the homepage's "Selected work" section and the full /projects page.
-// Source of truth: the 15-project AI Engineer 2026 portfolio plan.
-// `highlight: true` marks the 3-5 shown on the homepage — pick these once you've decided
-// which projects best represent you; everything here is shown in full on /projects.
+// `shipped` holds finished and in-progress work; `projects` is the 15-project roadmap.
+// `highlight: true` marks the entries shown on the homepage "Selected work" list.
 
 export type ProjectStatus = "in-progress" | "planned" | "done";
 
 export const statusLabel: Record<ProjectStatus, string> = {
   "in-progress": "In progress",
   planned: "Planned",
-  done: "Live",
+  done: "Shipped",
 };
 
 export type Phase =
@@ -20,9 +19,11 @@ export type Phase =
 export interface Project {
   id: number;
   slug: string;
-  phase: Phase;
+  phase?: Phase; // roadmap projects only
   title: string;
   status: ProjectStatus;
+  repo?: string; // public GitHub repository
+  context?: string; // where it was built, e.g. "EPITA course project · team of 3"
   highlight?: boolean; // set true on 3-5 entries to feature them in the homepage "Selected work" list
   image?: string; // path under /public — reserve for a REAL product screenshot once a project actually ships, not a mockup
   flow?: {
@@ -35,13 +36,272 @@ export interface Project {
   oneLiner: string; // homepage "Selected work" description
   problem: string; // /projects page: business use case
   tech: string[];
-  architecture: string;
-  significance: string; // why it matters to recruiters/clients
-  freelanceValue: string;
-  resumeBullet: string;
-  buildTime: string;
-  difficulty: "Low-medium" | "Medium" | "Medium-high" | "High";
+  spotlight?: boolean; // the one project shown as the big featured case study on the homepage
+  team?: string[]; // teammates to credit on team projects
+  myRole?: string[]; // what I personally built on a team project (taken from my commits)
+  metrics?: { value: string; label: string }[]; // measured results only, each from the project's own eval
+  gallery?: { src: string; caption: string; width?: number; height?: number }[]; // REAL screenshots of the running app, under /public (width/height = pixel size, for uncropped display)
+  deck?: string; // downloadable presentation under /public
+  // Planning notes for roadmap entries; not rendered on the site.
+  architecture?: string;
+  significance?: string; // why it matters to recruiters/clients
+  freelanceValue?: string;
+  resumeBullet?: string;
+  buildTime?: string;
+  difficulty?: "Low-medium" | "Medium" | "Medium-high" | "High";
 }
+
+export const shipped: Project[] = [
+  {
+    id: 105,
+    slug: "eu-ai-act-assistant",
+    title: "EU AI Act Assistant",
+    status: "done",
+    highlight: true,
+    spotlight: true,
+    context: "EPITA · Team ParisAI",
+    team: ["Sai Prasad Bandari", "Prodipta Paul"],
+    tag: "RAG + Agent",
+    oneLiner:
+      "Cited question answering over the 144-page EU AI Act, with hybrid search, local re-ranking, an agent with human-approved actions and measured injection defences.",
+    problem:
+      "The EU AI Act is 144 pages of legal text: 113 articles, 13 annexes and 180 recitals. Answers about it have to be exact (fine amounts, dates, article numbers), so the assistant answers only from the regulation, cites the page, and refuses when the answer isn't there.",
+    flow: {
+      stages: [
+        "Clean the question",
+        "FAISS + BM25 → RRF",
+        "bge-reranker (local GPU)",
+        "Relevance gate ≥ 0.05",
+        "Trimmed context",
+        "Answer + page citations",
+      ],
+      branch: ["Cited answer + confidence score", "“I don't have information”"],
+      caption:
+        "Agent mode swaps the fixed path for a tool loop: six tools, a 6-step cap, and a code guard so a message can only reach the human approval gate when the user asks for it.",
+    },
+    metrics: [
+      { value: "0.87", label: "Recall@5 on 44 eval questions" },
+      { value: "0.63", label: "Recall@1 with re-ranking, up from 0.37" },
+      { value: "10/10", label: "prompt-injection attacks resisted (was 7/10)" },
+      { value: "0/3", label: "poisoned sends reached the approval gate" },
+      { value: "0%", label: "wrong refusals on answerable questions" },
+      { value: "$0", label: "per question in fully local mode" },
+    ],
+    gallery: [
+      {
+        src: "/projects/eu-ai-act/chat.jpg", width: 1330, height: 896,
+        caption: "A cited answer with its confidence score and the live cost table.",
+      },
+      {
+        src: "/projects/eu-ai-act/how-it-works.jpg", width: 1232, height: 961,
+        caption: "The clickable How it works flowchart: RAG pipeline next to the agent loop.",
+      },
+      {
+        src: "/projects/eu-ai-act/routing.jpg", width: 1330, height: 896,
+        caption: "Routing check: does the agent pick the right tool for each kind of question?",
+      },
+      {
+        src: "/projects/eu-ai-act/trace.jpg", width: 1470, height: 801,
+        caption: "Retrieval trace: every step of a question, with what happened and how long it took.",
+      },
+    ],
+    deck: "/ParisAI_RAG_Agent.pptx",
+    myRole: [
+      "Built the first version: FAISS retrieval, gpt-4o-mini answers with page citations, Gradio UI",
+      "Moved re-ranking onto the local GPU and added query and retrieval caches",
+      "Added api, hybrid and fully local run modes, streamed answers and smaller prompts",
+      "Built the prompt-injection defences and test suite: 7/10 → 10/10 attacks resisted",
+      "Wrote the eval runner: recall@k, MRR, ablation and threshold tables, regression checks",
+      "Added the get_definition and date_diff agent tools, the send guard and the action-injection test",
+      "Built the retrieval trace, the How it works, Routing and Evaluation pages, and the presentation deck",
+    ],
+    howItWorks: [
+      {
+        step: "Index",
+        detail:
+          "The 144-page regulation is extracted with PyMuPDF, split into 1,000-character chunks with 200 overlap, embedded (text-embedding-3-small, or bge-base on the local GPU) into FAISS, and indexed again for BM25 keyword search.",
+      },
+      {
+        step: "Clean the question",
+        detail:
+          "Before anything runs, sentences that give the assistant orders and text posing as context or citations are stripped out, so a question can't smuggle in fake passages. That alone took injection resistance from 7/10 to 10/10.",
+      },
+      {
+        step: "Hybrid search",
+        detail:
+          "FAISS (meaning) and BM25 (exact terms like “Article 6(1)” or “Annex III”) each return their top 15, merged by Reciprocal Rank Fusion. A question that names an article or annex also gets that unit's own text by its heading.",
+      },
+      {
+        step: "Re-rank and gate",
+        detail:
+          "A bge-reranker cross-encoder scores up to 30 candidates on the local GPU. If the best passage scores below 0.05, the question is refused without calling the model at all.",
+      },
+      {
+        step: "Answer with citations",
+        detail:
+          "At most 5 passages go to the model, trimmed to their relevant sentences (29% fewer tokens). Every claim cites source and page; a check flags any cited page the model was never given, and each answer gets a confidence score.",
+      },
+      {
+        step: "Agent mode",
+        detail:
+          "The model picks from six tools (search, calculator, exact quote, definitions, date gaps and a send_message draft), capped at 6 steps. Sending is guarded in code and needs a person to confirm, so a poisoned document can't make it act.",
+      },
+      {
+        step: "Evaluate everything",
+        detail:
+          "44 questions with expected pages drive recall@k, MRR, an ablation per retrieval stage, a refusal-threshold table and a regression script that fails on any regression. Every API call is priced, with a hard $5 budget cap.",
+      },
+    ],
+    tech: ["Python", "FAISS", "BM25", "bge-reranker", "gpt-4o-mini", "Qwen2.5-3B", "Gradio", "uv"],
+  },
+  {
+    id: 101,
+    slug: "house-price-mlops",
+    title: "House Price MLOps Pipeline",
+    status: "done",
+    highlight: true,
+    repo: "https://github.com/xlucifer65/Housing-price-prediction",
+    context: "EPITA · Data Science in Production",
+    flow: {
+      stages: [
+        "New data files",
+        "Airflow ingestion DAG",
+        "Great Expectations checkpoint",
+        "PostgreSQL + run stats",
+        "FastAPI model service",
+        "Streamlit app",
+      ],
+      caption:
+        "Failing batches are routed away from training and trigger a Microsoft Teams alert; validation results are published as Data Docs.",
+    },
+    howItWorks: [
+      {
+        step: "Feature contract",
+        detail:
+          "A shared feature module defines every input field and its valid range, so training, the serving API and the Airflow DAGs build features the same way. That keeps training and serving in sync.",
+      },
+      {
+        step: "Ingest and validate",
+        detail:
+          "An Airflow DAG picks up new data and runs it through a Great Expectations checkpoint. Passing and failing rows are split, and run statistics are written to PostgreSQL.",
+      },
+      {
+        step: "Alert",
+        detail:
+          "When a checkpoint fails, the pipeline posts an alert to Microsoft Teams, so bad data is caught before it reaches the model.",
+      },
+      {
+        step: "Serve",
+        detail:
+          "A FastAPI service loads the model and answers predictions; a scheduled prediction DAG scores new data. The Streamlit app only talks to the API, never to the model or database directly.",
+      },
+      {
+        step: "Run anywhere",
+        detail:
+          "Every service runs from one Docker Compose file, so the whole stack starts with a single command.",
+      },
+    ],
+    tag: "MLOps",
+    oneLiner:
+      "Validated data pipeline and model API with Airflow, Great Expectations and alerting.",
+    problem:
+      "A model is only as reliable as the data reaching it. This project wraps a house-price regression model in the production pieces around it: data validation, alerting, a serving API and an app.",
+    tech: ["Airflow", "Great Expectations", "FastAPI", "PostgreSQL", "Streamlit", "Docker Compose"],
+  },
+  {
+    id: 102,
+    slug: "linkedin-hr-agent",
+    title: "LinkedIn HR Agent",
+    status: "done",
+    highlight: true,
+    repo: "https://github.com/xlucifer65/linkedin-hr-agent",
+    flow: {
+      stages: [
+        "PDF · DOCX · URL · Drive",
+        "Extract + chunk",
+        "Local embeddings → pgvector",
+        "Claude tool use",
+        "Branded image card",
+        "Review → LinkedIn / Drive",
+      ],
+      caption:
+        "A daily scheduler runs the agent automatically; agent memory stops it repeating recent topics.",
+    },
+    howItWorks: [
+      {
+        step: "Build the knowledge base",
+        detail:
+          "Files, web pages and Google Drive documents are extracted, split into 500-word chunks with 50-word overlap, embedded locally with bge-small and stored in PostgreSQL with pgvector.",
+      },
+      {
+        step: "Pick a topic",
+        detail:
+          "The agent chooses a service from the company catalog and checks its memory so it doesn't repeat a recent topic.",
+      },
+      {
+        step: "Retrieve and write",
+        detail:
+          "The closest chunks are found by cosine similarity. Claude Sonnet writes the post from that context and returns it through tool calls, so the output is structured.",
+      },
+      {
+        step: "Make the image",
+        detail:
+          "Claude Haiku writes an image prompt, DALL·E renders the visual, and Pillow composes a branded card with the headline and key points.",
+      },
+      {
+        step: "Review and publish",
+        detail:
+          "Drafts appear in a Next.js dashboard for review, then publish to LinkedIn through OAuth or save to Google Drive.",
+      },
+    ],
+    tag: "RAG agent",
+    oneLiner:
+      "An agent that writes branded LinkedIn posts grounded in a company's own documents.",
+    problem:
+      "An HR company wanted regular LinkedIn posts that stay accurate to its own services and documents, without someone writing each one by hand.",
+    tech: ["FastAPI", "Claude API", "pgvector", "fastembed", "Next.js", "Docker Compose"],
+  },
+  {
+    id: 103,
+    slug: "epita-scheduler",
+    title: "EPITA Class Scheduler",
+    status: "done",
+    highlight: true,
+    repo: "https://github.com/xlucifer65/epita-scheduler",
+    flow: {
+      stages: [
+        "Courses · teachers · rooms · timeslots",
+        "Constraints encoded for Z3",
+        "SMT solve",
+        "Conflict-free weekly timetable",
+        "React calendar UI",
+      ],
+      caption:
+        "Versioned REST API over a repository/service layer, Alembic migrations, and tests on both backend and frontend.",
+    },
+    tag: "Optimization",
+    oneLiner:
+      "A timetable engine that turns room, teacher and slot rules into a conflict-free schedule with the Z3 solver.",
+    problem:
+      "Building a university timetable by hand means juggling room capacity, teacher availability and course clashes. Encoding those rules as constraints lets a solver find a valid week automatically.",
+    tech: ["Z3 SMT solver", "FastAPI", "SQLAlchemy", "PostgreSQL", "React + TypeScript", "pytest"],
+  },
+  {
+    id: 104,
+    slug: "valeurs-foncieres",
+    title: "Valeurs Foncières Analysis",
+    status: "done",
+    highlight: true,
+    repo: "https://github.com/xlucifer65/valeurs-foncieres-project",
+    context: "Team of 3",
+    tag: "Data",
+    oneLiner:
+      "Loading and cleaning about 20 million French property sales from data.gouv.fr.",
+    problem:
+      "Five years of French real-estate transactions (2021–2025) is roughly 20 million rows. I wrote the loading, merging and cleaning notebooks (missing values, types, outliers, duplicates) and set up the repository conventions the team built its analysis on.",
+    tech: ["Python", "pandas", "Jupyter"],
+  },
+];
 
 export const projects: Project[] = [
   {
@@ -141,7 +401,6 @@ export const projects: Project[] = [
     phase: "Core foundations",
     title: "Document Intelligence Pipeline",
     status: "planned",
-    highlight: true,
     flow: {
       stages: [
         "Upload",
@@ -173,7 +432,6 @@ export const projects: Project[] = [
     phase: "Core foundations",
     title: "MCP Server for Internal Data Access",
     status: "planned",
-    highlight: true,
     flow: {
       stages: [
         "Claude Desktop / Cursor",
@@ -246,7 +504,6 @@ export const projects: Project[] = [
     phase: "Agentic & multi-system",
     title: "Voice AI Receptionist",
     status: "planned",
-    highlight: true,
     tag: "Voice",
     oneLiner: "An inbound phone agent that transcribes, decides, and books a real calendar slot.",
     problem:

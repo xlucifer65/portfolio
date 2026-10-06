@@ -1,41 +1,106 @@
 @import "tailwindcss";
 
+/* Light-only on purpose: the portrait's navy engraving disappears on dark backgrounds. */
 :root {
-  --cream: #efeae0;
-  --ink: #1c1a17;
-  --muted: #4a463f;
-  --line: #cdc5b6;
+  --bg: #ededed;
+  --surface: #ffffff;
+  --surface-2: #f5f5f5;
+  --ink: #111111;
+  --muted: #5f5f5f;
+  --faint: #6b6b6b;
+  --line: #d6d6d6;
+  --accent: #23409a; /* portrait navy */
+  --gold: #c9a227; /* portrait gold */
 }
 
 @theme inline {
-  --color-cream: var(--cream);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-line: var(--line);
-  --font-display: var(--font-display);
-  --font-sans: var(--font-sans);
-  --radius-xs: 2px;
-  --radius-sm: 3px;
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
-::selection {
-  background: var(--ink);
-  color: var(--cream);
+html { color-scheme: light; }
+body { font-feature-settings: "kern"; }
+::selection { background: var(--accent); color: #fff; }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+button, a, summary { -webkit-tap-highlight-color: transparent; }
+
+.shell { width: min(calc(100% - 3rem), 1040px); margin-inline: auto; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: .045em;
+  color: var(--muted);
+}
+.text-link {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 5px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.text-link:hover { color: var(--accent); text-decoration-color: currentColor; }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 40px;
+  padding: .55rem .9rem;
+  border-radius: 6px;
+  background: var(--surface-2);
+  font-size: 13px;
+  line-height: 1.5;
+  transition: background-color 160ms ease;
+}
+.button:hover { background: var(--line); }
+.tech-tag {
+  padding: .2rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
-*:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
+/* Cover cards (book rail, /projects grid, project page header) */
+.cover {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+}
+.cover-stage {
+  container-type: inline-size;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  aspect-ratio: 5 / 3;
+  transform: translateX(-50%);
+}
+.cover-glyph {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: .8;
+  letter-spacing: -.06em;
+  color: var(--ink);
+  white-space: nowrap;
+  user-select: none;
 }
 
-body {
-  font-feature-settings: "kern";
+@media (min-width: 768px) {
+  .shell { width: min(calc(100% - 5rem), 1040px); }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
