@@ -67,10 +67,10 @@ const links: LinkItem[] = [
 function IconLink({ item, tip }: { item: LinkItem; tip: "right" | "below" }) {
   const { href, label, Icon, internal } = item;
   const className =
-    "group relative grid h-11 w-11 place-items-center rounded-md text-muted transition-colors hover:bg-surface hover:text-accent focus-visible:text-accent";
+    "group relative grid h-12 w-12 place-items-center rounded-md text-muted transition-colors hover:bg-surface hover:text-accent focus-visible:text-accent";
   const content = (
     <>
-      <Icon className="h-[18px] w-[18px]" />
+      <Icon className="h-6 w-6" />
       {/* Name appears on hover and keyboard focus. */}
       <span
         aria-hidden="true"
@@ -98,14 +98,14 @@ function IconLink({ item, tip }: { item: LinkItem; tip: "right" | "below" }) {
   );
 }
 
-// Desktop: a slim column fixed to the left edge, vertically centred.
+// Wide screens (xl): a slim column fixed to the left edge, vertically centred.
 export function LinkRail() {
   return (
     <nav
       aria-label="Links"
-      className="fixed top-1/2 left-2 z-40 hidden -translate-y-1/2 lg:block xl:left-6"
+      className="fixed top-1/2 left-6 z-40 hidden -translate-y-1/2 xl:block"
     >
-      <ul className="flex flex-col gap-1 rounded-lg border border-line bg-bg/90 p-1 backdrop-blur">
+      <ul className="flex flex-col gap-2">
         {links.map((item) => (
           <li key={item.label}>
             <IconLink item={item} tip="right" />
@@ -119,7 +119,7 @@ export function LinkRail() {
 // Phones and tablets: the same icons in a row.
 export function LinkRow() {
   return (
-    <nav aria-label="Links" className="lg:hidden">
+    <nav aria-label="Links" className="xl:hidden">
       <ul className="-ml-3 flex flex-wrap">
         {links.map((item) => (
           <li key={item.label}>

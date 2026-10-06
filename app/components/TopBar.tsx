@@ -3,7 +3,7 @@ import { site } from "@/content/site";
 import { LinkRail, LinkRow } from "@/app/components/LinkIcons";
 
 // Quiet header: name on inner pages. Links are icons — a fixed column on the left edge
-// from `lg` up, a row here on smaller screens.
+// from `xl` up, a row here on smaller screens.
 export function TopBar({ showName = true }: { showName?: boolean }) {
   return (
     <>
